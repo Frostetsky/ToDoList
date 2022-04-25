@@ -1,0 +1,14 @@
+server:
+  security:
+    path:
+      anonymous: /auth/**, /hello
+      admin: /admin/**
+
+# Other paths for main Role.
+
+configuration-server:
+  port: 9090
+
+secret-parameters:
+  client-id: admin-id
+  client-admin: admin-secret
