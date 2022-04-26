@@ -23,7 +23,7 @@ public class TaskRepository {
     }
 
     public void createdTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
+        try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             session.save(task);
             session.getTransaction().commit();
@@ -35,7 +35,7 @@ public class TaskRepository {
     @SuppressWarnings("unchecked")
     public List<Task> findAll() {
         List<Task> result = List.of();
-        try (Session session = sessionFactory.openSession()) {
+        try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             result = session.createQuery("from Task").getResultList();
             session.getTransaction().commit();
@@ -46,7 +46,7 @@ public class TaskRepository {
     }
 
     public void update(long id) {
-        try (Session session = sessionFactory.openSession()) {
+        try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             Query query = session.createQuery("update Task set done = true, completedTask =: complete where id =: id");
             query.setParameter("id", id);

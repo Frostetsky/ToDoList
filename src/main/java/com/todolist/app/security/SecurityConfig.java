@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import java.util.Objects;
+
 import static com.todolist.app.util.Constants.*;
 
 @Configuration
@@ -38,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String[] anonymousPaths = environment.getProperty(Keys.ANONYMOUS_PATHS, String[].class);
-        String[] adminPaths = environment.getProperty(Keys.ADMIN_PATHS, String[].class);
+        String[] anonymousPaths = Objects.requireNonNull(environment.getProperty(Keys.ANONYMOUS_PATHS, String[].class));
+        String[] adminPaths = Objects.requireNonNull(environment.getProperty(Keys.ADMIN_PATHS, String[].class));
         http
                 .csrf()
                 .disable()

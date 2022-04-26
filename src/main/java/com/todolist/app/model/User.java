@@ -1,5 +1,6 @@
 package com.todolist.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,11 +35,12 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "index"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "index"))
+            joinColumns = @JoinColumn(name = "user_index", referencedColumnName = "index"),
+            inverseJoinColumns = @JoinColumn(name = "role_index", referencedColumnName = "index"))
     private Set<UserRole> userRoles;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @ToString.Exclude
     private Set<Task> tasks;
 
     @Override

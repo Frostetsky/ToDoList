@@ -7,13 +7,17 @@ import com.todolist.app.exception.ValidationParamsException;
 import com.todolist.app.model.User;
 import com.todolist.app.service.UserService;
 import com.todolist.app.util.BindingResultUtil;
+import com.todolist.app.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,24 +33,22 @@ public class AuthController {
     }
 
     @PostMapping("/signIn")
-    public String authenticateUser(@RequestBody SignInDto signInDto) throws ValidationParamsException {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+    public String authenticateUser(@Valid @RequestBody SignInDto signInDto) throws AuthenticationException {
+        var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 signInDto.getUsername(), signInDto.getPassword()));
 
-        BindingResultUtil.checkExceptionWithLogin(authentication);
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "User signed-in successfully.";
+        return Constants.SUCCESSFUL_AUTHORIZATION;
     }
 
     @PostMapping("/signUp")
-    public String registerUser(@RequestBody SignUpDto signUpDto, BindingResult bindingResult) throws AdminIdentificationException, ValidationParamsException {
+    public String registerUser(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult) throws AdminIdentificationException, ValidationParamsException {
 
         BindingResultUtil.checkExceptionWithRegistered(bindingResult);
 
-        User user = userService.identificationUser(signUpDto);
+        var user = userService.identificationUser(signUpDto);
         userService.save(user);
 
-        return "User registered successfully.";
+        return Constants.SUCCESSFUL_REGISTRATION;
     }
 }

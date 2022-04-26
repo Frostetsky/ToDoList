@@ -20,7 +20,7 @@ public class AspectGlobalJComponentSpringBeans {
 
     @AfterReturning(pointcut = "beanAnnotationAllComponent()", returning = "result")
     public void beanAnnotationWithServiceAndComponentAndRepositoryAndControllerAfterResult(JoinPoint joinPoint, Object result) {
-        log.info("Exit: {}.{}() with result = {}",
+        log.info("<=== {}.{}() with result = {}",
                 joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName(),
                 Objects.nonNull(result) ? result.toString() : "null");
@@ -30,13 +30,13 @@ public class AspectGlobalJComponentSpringBeans {
     public Object log(ProceedingJoinPoint joinPoint) {
         try {
             Object result = joinPoint.proceed();
-            log.info("Enter: {}.{}() with params = {}",
+            log.info("===> {}.{}() with params = {}",
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
                     Arrays.toString(joinPoint.getArgs()));
             return result;
         } catch (Throwable e) {
-            log.error("Exception in: {} in {}.{}()",
+            log.error("<=== {} in {}.{}()",
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
                     Arrays.toString(joinPoint.getArgs()));

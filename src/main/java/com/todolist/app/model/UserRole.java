@@ -1,5 +1,6 @@
 package com.todolist.app.model;
 
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class UserRole {
     @Column(name = "index")
     private long id;
 
-    @Column(name = "role")
+    @Column(name = "role", unique = true)
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -10,4 +10,8 @@ public class Constants {
 
     public String VALIDATION_REGISTER_EXCEPTION = "Ошибка валидации данных в поле %s, %s.";
     public String VALIDATION_LOGIN_EXCEPTION = "Неверный логин и/или пароль.";
+
+    public String SUCCESSFUL_REGISTRATION = "Пользователь успешно зарегистрирован";
+
+    public String SUCCESSFUL_AUTHORIZATION = "Пользователь успешно авторизован";
 }

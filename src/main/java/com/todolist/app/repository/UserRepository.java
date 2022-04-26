@@ -20,7 +20,7 @@ public class UserRepository {
     }
 
     public void signUp(User user) {
-        try (Session session = sessionFactory.openSession()) {
+        try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             session.save(user);
             session.getTransaction().commit();
@@ -31,7 +31,7 @@ public class UserRepository {
 
     public Optional<User> findByUserName(String username) {
         User user = new User();
-        try (Session session = sessionFactory.openSession()) {
+        try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             user = (User) session.createQuery("from User as u where u.username = :username").setParameter("username", username).getSingleResult();
             session.getTransaction().commit();

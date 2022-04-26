@@ -42,9 +42,8 @@ public class TaskService {
     }
 
     public void create(Task task) {
-        String username = contextUtil.getUserName();
-        System.out.println(username);
-        User user = userRepository.findByUserName(username).orElse(null);
+        var username = contextUtil.getUserName();
+        var user = userRepository.findByUserName(username).orElse(null);
         task.setUser(user);
         taskRepository.createdTask(task);
     }

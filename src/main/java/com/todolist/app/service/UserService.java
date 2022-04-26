@@ -6,8 +6,10 @@ import com.todolist.app.model.Role;
 import com.todolist.app.model.User;
 import com.todolist.app.model.UserRole;
 import com.todolist.app.repository.UserRepository;
+import com.todolist.app.repository.UserRoleRepository;
 import com.todolist.app.util.Constants;
 import com.todolist.app.util.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,25 +21,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    private final UserRoleService roleService;
 
     private final Environment environment;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, Environment environment, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, Environment environment,
+                       BCryptPasswordEncoder bCryptPasswordEncoder, UserRoleService roleService) {
         this.userRepository = userRepository;
         this.environment = environment;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -60,10 +65,12 @@ public class UserService implements UserDetailsService {
         user.setUsername(signUpDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(signUpDto.getPassword()));
 
+        Map<Role, UserRole> roles = roleService.findAllRoles();
+
         if (isAdmin(signUpDto)) {
-            user.setUserRoles(Set.of(new UserRole(Role.ROLE_ADMIN)));
+            user.setUserRoles(Set.of(roles.get(Role.ROLE_ADMIN)));
         } else {
-            user.setUserRoles(Set.of(new UserRole(Role.ROLE_USER)));
+            user.setUserRoles(Set.of(roles.get(Role.ROLE_USER)));
         }
         return user;
     }
