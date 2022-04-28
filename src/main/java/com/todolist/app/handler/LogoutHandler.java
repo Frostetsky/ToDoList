@@ -28,6 +28,6 @@ public class LogoutHandler extends SimpleUrlLogoutSuccessHandler implements Logo
         String redirectUrl = Objects.requireNonNull(environment.getProperty(Keys.ANONYMOUS_PATHS, String[].class))[1];
         authentication.setAuthenticated(false);
         response.sendRedirect(redirectUrl);
-        super.onLogoutSuccess(request, response, authentication);
     }
+
 }
